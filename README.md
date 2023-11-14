@@ -11,11 +11,12 @@ __Team Members__:
 | Jingjing Yao | jyao27   | jyao27@illinois.edu             |
 | Xian Chen    | xianc2   | xianc2@illinois.edu             |
 
-<!-- running project:
+
+### 
 pip install -r requirements.txt
 Env requirement: python 3.10(3.7 and higher might be fine too)
 Will need the yelp data set inside the folder ./yelp_dataset/*, name should be yelp_academic_dataset_*.json such like that
- -->
+
 
 
 ### Project Overview
