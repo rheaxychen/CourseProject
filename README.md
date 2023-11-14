@@ -11,6 +11,13 @@ __Team Members__:
 | Jingjing Yao | jyao27   | jyao27@illinois.edu             |
 | Xian Chen    | xianc2   | xianc2@illinois.edu             |
 
+<!-- running project:
+pip install -r requirements.txt
+Env requirement: python 3.10(3.7 and higher might be fine too)
+Will need the yelp data set inside the folder ./yelp_dataset/*, name should be yelp_academic_dataset_*.json such like that
+ -->
+
+
 ### Project Overview
 Our chosen topic is a tourist-oriented restaurant concierge service designed for travelers with limited time in a city who seek the best dining experiences during their short stay. Our objective is to develop an application that streamlines the process of finding top-rated restaurants for tourists. The application will predominantly feature a user-friendly command-line interface, simplifying the user's interaction with our service. This project is intriguing because it addresses a common pain point for travelers. When visiting a new city, tourists often struggle to find the best restaurants, leading to time-consuming research on platforms like Google Maps and Yelp. Our application will save users time and effort, providing a curated list of top restaurants based on their preferences and constraints. The expected outcome is a functional and user-friendly restaurant concierge application that simplifies the process of finding the best dining options for tourists during their short trips.
 
