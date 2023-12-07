@@ -28,6 +28,7 @@ class RestaurantConcierge:
         self.business_data = None
         self.ids_inLocation = []
         self.distance = distance
+        self.DEFAULT_DISTANCE = 100
 
 
     # set up distance if need
@@ -111,13 +112,15 @@ class RestaurantConcierge:
         try:
             businesses_within_distance = []
             c = 0
+
             for business in data:
+
                 latitude = business.get('latitude')
                 longitude = business.get('longitude')
                 
                 # Calculate distance between user location and business location
                 business_distance = self.cal_distance(user_location, [latitude, longitude])
-                
+
                 # Check if the business is within the specified distance
                 if business_distance <= self.distance:
                     c += 1
@@ -134,23 +137,23 @@ class RestaurantConcierge:
             business_expect_min =10
             business_exxpect_max = 20
             # Adjust self.distance based on the count
-            if c <= business_expect_min and self.distance < 150:
+            if c <= business_expect_min and self.distance < self.DEFAULT_DISTANCE:
                 # If count is 0, increase self.distance by a certain amount
                 self.distance += 0.1
                 print(f'No businesses found within the current distance. Increasing distance to {self.distance}.')
                 return self.get_business_within_distance(data, user_location)
             
-            elif c > business_exxpect_max and self.distance < 150:
+            elif c > business_exxpect_max and self.distance < self.DEFAULT_DISTANCE:
                 # If count is more than business_exxpect_max, decrease self.distance by a certain amount
                 self.distance -= 0.1
                 print(f'More than {business_exxpect_max} businesses found within the current distance. Decreasing distance to {self.distance}.')
                 return self.get_business_within_distance(data, user_location)
             
-            elif c < 10 and self.distance >= 150:
+            elif c < 10 and self.distance >= self.DEFAULT_DISTANCE:
                 # the case if business do not have 10 within distance
                 print(f'That is all business found within {self.distance} km')
                 return businesses_within_distance
-            elif c <= 0 and self.distance >= 150:
+            elif c <= 0 and self.distance >= self.DEFAULT_DISTANCE:
                 print(f'No business found near by.')
                 return
             else:
@@ -412,6 +415,8 @@ class RestaurantConcierge:
         try:
             if addr is None:
                 location = self.get_address_by_ip()
+                print(location)
+                exit()
                 if location is None:
                     print("Unable to determine current location. Exiting.")
                     return
@@ -451,6 +456,7 @@ if __name__ == "__main__":
     print("Choose an option to get recommendations:")
     print("1. Using location from the current address")
     print("2. Inserting an address")
+    print("3. Default example")
     print("0. Exit")
 
     try:
@@ -463,7 +469,10 @@ if __name__ == "__main__":
         elif option == 2:
             address_insert = input("Enter the address you want to search: ")
             concierge.run_main(address_insert)
-            
+
+        elif option == 3:
+            concierge.run_main([40, 74])
+
         elif option == 0:
             print('program will exit...see yall')
             exit()
