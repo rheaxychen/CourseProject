@@ -28,6 +28,7 @@ class RestaurantConcierge:
         self.business_data = None
         self.ids_inLocation = []
         self.distance = distance
+        self.DEFAULT_DISTANCE = 100
 
 
     # set up distance if need
@@ -117,7 +118,6 @@ class RestaurantConcierge:
                 
                 # Calculate distance between user location and business location
                 business_distance = self.cal_distance(user_location, [latitude, longitude])
-                
                 # Check if the business is within the specified distance
                 if business_distance <= self.distance:
                     c += 1
@@ -125,7 +125,6 @@ class RestaurantConcierge:
                     business_with_distance['distance'] = business_distance
                     self.ids_inLocation.append(business_with_distance['business_id'])
                     businesses_within_distance.append(business_with_distance)
-            
             print(f'Total count for match: {c}')
 
             ##########################
@@ -134,25 +133,27 @@ class RestaurantConcierge:
             business_expect_min =10
             business_exxpect_max = 20
             # Adjust self.distance based on the count
-            if c <= business_expect_min and self.distance < 150:
+            if c <= business_expect_min and self.distance < self.DEFAULT_DISTANCE:
                 # If count is 0, increase self.distance by a certain amount
                 self.distance += 0.1
                 print(f'No businesses found within the current distance. Increasing distance to {self.distance}.')
                 return self.get_business_within_distance(data, user_location)
             
-            elif c > business_exxpect_max and self.distance < 150:
+            elif c > business_exxpect_max and self.distance < self.DEFAULT_DISTANCE:
                 # If count is more than business_exxpect_max, decrease self.distance by a certain amount
                 self.distance -= 0.1
                 print(f'More than {business_exxpect_max} businesses found within the current distance. Decreasing distance to {self.distance}.')
                 return self.get_business_within_distance(data, user_location)
             
-            elif c < 10 and self.distance >= 150:
+            elif c>0 and c < 10 and self.distance >= self.DEFAULT_DISTANCE:
                 # the case if business do not have 10 within distance
                 print(f'That is all business found within {self.distance} km')
                 return businesses_within_distance
-            elif c <= 0 and self.distance >= 150:
-                print(f'No business found near by.')
-                return
+            
+            elif c <= 0 and self.distance >= self.DEFAULT_DISTANCE:
+                print(f'No business found near by with in {self.DEFAULT_DISTANCE} KM. Program will exit!!')
+                
+                return None
             else:
                 # If count is within the desired range, update self.business_withinLocation and return the result
                 self.business_withinLocation = businesses_within_distance
@@ -216,8 +217,11 @@ class RestaurantConcierge:
         
         return similar_words
 
-    ###TODO: return result base on the query input(taco should return business related to taco)
-    # get rank function
+    ###TODO: return result base on the query input
+    # Get Rank Function
+    # The `get_rank` function utilizes an algorithm that calculates the ranking score based on processed queries. It applies the BM25 formula to obtain the score, combining it with review stars, useful count, funny count, and cool count, each assigned a different weight. 
+    # The query holds the most weight, while the others have varying weights.
+    # Additionally, the function returns the `relevance_percentage` based on how frequently the keyword appears in the review.
     def get_rank(self, keyword, weight_bm25=0.7, weight_stars=0.5, weight_useful=0.33, weight_funny=0.05, weight_cool=0.05):
         try:
             # download package incase first time run
@@ -426,7 +430,11 @@ class RestaurantConcierge:
             start_time = time.time()
             self.get_review_data()
             end_time = time.time()
-            ranked_businesses = self.get_rank(keyword)
+            if self.review_data_inlocation:
+                ranked_businesses = self.get_rank(keyword)
+            else:
+                print("there's no business found in this location, program will not run. Exit!")
+                return 
             if ranked_businesses is None:
                 print('Cannot find the result in your area')
                 print('\n', 'Program Done')
@@ -462,7 +470,7 @@ if __name__ == "__main__":
             
         elif option == 2:
             address_insert = input("Enter the address you want to search: ")
-            concierge.run_main(address_insert)
+            concierge.run_main(addr = address_insert)
             
         elif option == 0:
             print('program will exit...see yall')
