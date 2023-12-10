@@ -415,8 +415,7 @@ class RestaurantConcierge:
         try:
             if addr is None:
                 location = self.get_address_by_ip()
-                print(location)
-                exit()
+
                 if location is None:
                     print("Unable to determine current location. Exiting.")
                     return
@@ -468,7 +467,7 @@ if __name__ == "__main__":
             
         elif option == 2:
             address_insert = input("Enter the address you want to search: ")
-            concierge.run_main(address_insert)
+            concierge.run_main(addr=address_insert)
 
         elif option == 3:
             concierge.run_main([40, 74])
