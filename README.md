@@ -64,6 +64,6 @@ python restaurant_concierge_gui.py
 ```
 
 ## Resources
-- [Project Final Report](filepath)
-- [Project Demo Video]()
+- [Project Final Report](files/CS410%20Final%20Project%20Report%20.pdf)
+- [Project Demo Video](https://mediaspace.illinois.edu/media/t/1_x9km4tge)
 
